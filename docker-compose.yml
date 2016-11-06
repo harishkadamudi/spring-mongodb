@@ -1,0 +1,23 @@
+version: '2'
+volumes:
+  data-mongo:
+    external:
+      name: spring-boot-restful-data-mongo
+services:
+  mongodb:
+    container_name: people-datastore
+    image: mongo:3.2.9
+    command: mongod --smallfiles
+    volumes:
+      - data-mongo:/data/db
+  web:
+    container_name: people-service
+    image: harishkadamudi/gs-eizzy-userservice
+    depends_on: # people-datastore will be started before the people-service
+      - mongodb
+    ports:
+      - "8080:8080"
+    links:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb/test

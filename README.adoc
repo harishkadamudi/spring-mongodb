@@ -1,0 +1,19 @@
+Create Docker Image by running mvn clean package docker:build.
+Looking at the docker compose file, we have listed 2 images mongodb image and application image.
+When i run docker-compose with building the docker images, i got error where docker compose could not dlook for images.
+Hence, I build application image by running mvn clean package bocker:build which will generate image
+
+Run docker-compose file by running docker-compose up command which will look for docker images
+
+Use curl to upload some data to application
+
+$ curl -i -X POST -H "Content-Type:application/json" -d '{  "firstName" : "Harish",  "lastName" : "Kadamudi" }' http://localhost:8080/people
+$ curl http://localhost:8080/people
+
+Now, the interesting question is how to connect to mongodb instance.
+
+docker exec -it 73039eaf69c5 /entrypoint.sh mongo
+
+By default spring boot application will connect to test collections. Use test collection and look for person document
+
+db.person.find()
